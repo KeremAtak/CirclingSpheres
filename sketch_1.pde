@@ -22,6 +22,7 @@ int camposz;
 boolean plusColorX = false;
 boolean plusColorY = false;
 boolean plusColorZ = false;
+boolean fastBump = false;
 
 int colorX = 255;
 int colorY = 255;
@@ -33,7 +34,7 @@ int constant = 250;
 int val = 1;
 int plots = 4;
 
-int rotateM = 3;
+int rotationSpeed = 5000;
 int speedM = 5;
 
 void settings() {
@@ -73,18 +74,49 @@ void draw() {
     xswap(5);
     yswap(4);
   }
+  
+  
+  if (moonlander.getIntValue("speed") == 1) {
+    speedTo(30000, 3);
+    fastBump = true;
+  } else if (moonlander.getIntValue("speed") == 2) {
+    if (fastBump) {
+      speedTo(20000, 50);
+    }
+    fastBump = false;
+  } else if (moonlander.getIntValue("speed") == 3) {
+    speedTo(30000, 5);
+    fastBump = true;
+  } else if (moonlander.getIntValue("speed") == 4) {
+    speedTo(30000, 10);
+    fastBump = true;
+  } else if (moonlander.getIntValue("speed") == 5) {
+    speedTo(30000, 10);
+    fastBump = true;
+  }
+  
+  else if (moonlander.getIntValue("speed") == 0) {
+    rotationSpeed = 5000;
+  }
+  
 
   camera(camposx, camposy, camposz, width/2, height/2, 0, 0, 1, 0);
-  rotateX(camposx / 100);
-  rotateY(camposy / 100);
+  //rotateX(camposx / 100);
+  //rotateY(camposy / 100);
   if (start !=  -1) {
     drawDemo(5);
   }
 }
 
+void speedTo(int speed, int i) {
+  if (rotationSpeed + i <= speed) {
+    rotationSpeed += i;
+  }
+}
+
 //changes colors
 void xswap(int speed) {
-  println("Z ",colorX);
+  //println("X ",colorX);
   if(plusColorX){
     if (colorX + speed > 255) {
       plusColorX = false;
@@ -102,7 +134,7 @@ void xswap(int speed) {
 
 //please ignore copypaste
 void yswap(int speed) {
-  println("Y ",colorY);
+  //println("Y ",colorY);
   if(plusColorY){
     if (colorY + speed > 255) {
       plusColorY = false;
@@ -119,7 +151,7 @@ void yswap(int speed) {
 }
 
 void zswap(int speed) {
-  println("Z ",colorZ);
+  //println("Z ",colorZ);
   if(plusColorZ){
     if (colorZ + speed > 255) {
       plusColorZ = false;
@@ -147,15 +179,6 @@ void dividableWith(int number)  {
   }
 }
 
-void white() {
-  colorX = 240;
-  colorY = 240;
-  colorZ = 240;
-  
-  plusColorX = false;
-  plusColorY = false;
-  plusColorZ = false;
-}
 
 void drawDemo(float time) {
   translate(width/2, height/2);
@@ -167,7 +190,8 @@ void drawDemo(float time) {
 }
 
 void drawBall(float i) {
-  float t = millis()/1000.0f;
+  float t = millis()/(1000.0f / (1.0 * rotationSpeed / 10000));
+  println( rotationSpeed);
   float x = 100 * sin( t + i ); 
   float y = 100 * cos( t + i );
   fill(colorX, colorY, colorZ);
