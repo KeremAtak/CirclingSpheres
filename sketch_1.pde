@@ -19,6 +19,14 @@ int camposx;
 int camposy;
 int camposz;
 
+boolean plusColorX = false;
+boolean plusColorY = false;
+boolean plusColorZ = false;
+
+int colorX = 255;
+int colorY = 255;
+int colorZ = 255;
+
 int SONG_SKIP_MILLISECONDS = 200000;
 float angle = 0;
 int constant = 250;
@@ -58,6 +66,13 @@ void draw() {
   camposx = moonlander.getIntValue("camposx");
   camposy = moonlander.getIntValue("camposy");
   camposz = moonlander.getIntValue("camposz");
+  
+  if (moonlander.getIntValue("color") == 1) {
+    yswap(1);  
+  } else if (moonlander.getIntValue("color") == 2) {
+    xswap(5);
+    yswap(4);
+  }
 
   camera(camposx, camposy, camposz, width/2, height/2, 0, 0, 1, 0);
   rotateX(camposx / 100);
@@ -67,6 +82,80 @@ void draw() {
   }
 }
 
+//changes colors
+void xswap(int speed) {
+  println("Z ",colorX);
+  if(plusColorX){
+    if (colorX + speed > 255) {
+      plusColorX = false;
+    } else {
+      colorX += speed;
+    }
+  } else {
+    if (colorX - speed < 0) {
+      plusColorX = true;
+    } else {
+      colorX -= speed;
+    }
+  }
+}
+
+//please ignore copypaste
+void yswap(int speed) {
+  println("Y ",colorY);
+  if(plusColorY){
+    if (colorY + speed > 255) {
+      plusColorY = false;
+    } else {
+      colorY += speed;
+    }
+  } else {
+    if (colorY - speed < 0) {
+      plusColorY = true;
+    } else {
+      colorY -= speed;
+    }
+  }
+}
+
+void zswap(int speed) {
+  println("Z ",colorZ);
+  if(plusColorZ){
+    if (colorZ + speed > 255) {
+      plusColorZ = false;
+    } else {
+      colorZ += speed;
+    }
+  } else {
+    if (colorZ - speed < 0) {
+      plusColorZ = true;
+    } else {
+      colorZ -= speed;
+    }
+  }
+}
+
+void dividableWith(int number)  {
+  while (colorX % number != 0) {
+    colorX--;
+  }
+  while (colorY % number != 0) {
+    colorY--;
+  }
+  while (colorZ % number != 0) {
+    colorZ--;
+  }
+}
+
+void white() {
+  colorX = 240;
+  colorY = 240;
+  colorZ = 240;
+  
+  plusColorX = false;
+  plusColorY = false;
+  plusColorZ = false;
+}
 
 void drawDemo(float time) {
   translate(width/2, height/2);
@@ -81,7 +170,7 @@ void drawBall(float i) {
   float t = millis()/1000.0f;
   float x = 100 * sin( t + i ); 
   float y = 100 * cos( t + i );
-  fill(100, 100, 100);
+  fill(colorX, colorY, colorZ);
   pushMatrix();
   translate(x, y);
   rotate(t);
