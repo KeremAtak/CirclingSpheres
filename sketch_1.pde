@@ -15,9 +15,13 @@ int CANVAS_WIDTH = 480;
 int CANVAS_HEIGHT = 360;
 float ASPECT_RATIO = (float)CANVAS_WIDTH/CANVAS_HEIGHT;
 
-int SONG_SKIP_MILLISECONDS = 200000;
+int camposx;
+int camposy;
+int camposz;
 
-float angle = 1;
+int SONG_SKIP_MILLISECONDS = 200000;
+float angle = 0;
+int constant = 250;
 int val = 1;
 int plots = 4;
 
@@ -51,32 +55,39 @@ void draw() {
   moonlander.update();
   val = moonlander.getIntValue("test");
   int start = moonlander.getIntValue("start");
-  println(val,' ', start);
-  rotateY((mouseX - width/2) * 0.001);
-  rotateX((mouseY - height/2) * -0.001);
-  if (start == 1) {
+  camposx = moonlander.getIntValue("camposx");
+  camposy = moonlander.getIntValue("camposy");
+  camposz = moonlander.getIntValue("camposz");
+
+  camera(camposx, camposy, camposz, width/2, height/2, 0, 0, 1, 0);
+  rotateX(camposx / 100);
+  rotateY(camposy / 100);
+  if (start !=  -1) {
     drawDemo(5);
   }
 }
 
 
 void drawDemo(float time) {
-  println("  dsdsas");
-  float increase = PI*2/plots + angle;
   translate(width/2, height/2);
-  rotateZ(10);
-  for (int i = 0; i < plots; i++) {
-    angle += increase;
-    float x = 100 * cos( angle); 
-    float y = 100 * sin( angle);
+  //rotateZ(1);
+  drawBall(0);
+  drawBall(1.5);
+  drawBall(3);
+  drawBall(4.5);
+}
 
-    println("angle", angle);
-    pushMatrix();
-    translate(x * 1, y * 1);
-    rotate(angle);
-    sphere(30);
-    popMatrix();
-  }
+void drawBall(float i) {
+  float t = millis()/1000.0f;
+  float x = 100 * sin( t + i ); 
+  float y = 100 * cos( t + i );
+  fill(100, 100, 100);
+  pushMatrix();
+  translate(x, y);
+  rotate(t);
+  sphere(30);
+  popMatrix();
+  angle += PI*2/plots;
 }
 
 //void keyPressed() {
