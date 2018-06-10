@@ -20,6 +20,7 @@ int camposy;
 int camposz;
 
 int ballsize;
+boolean grow = true;
 int radius;
 int timeranout;
 int beat;
@@ -32,6 +33,7 @@ boolean fastBump = false;
 int colorX = 255;
 int colorY = 255;
 int colorZ = 255;
+int colorindex = 0;
 
 int SONG_SKIP_MILLISECONDS = 200000;
 float angle = 0;
@@ -78,8 +80,16 @@ void draw() {
   timeranout = moonlander.getIntValue("timeranout");
   beat = moonlander.getIntValue("beat");
   
-  if (beat == 1) {
-   adjustBeat(); 
+  if (moonlander.getIntValue("beat") == 0) {
+    ballsize = 30;
+    grow = true;
+    if (colorindex == 2) {
+      colorindex = 0;
+    } else {
+      colorindex++;  
+    }
+  } else if (moonlander.getIntValue("beat") == 1) {
+    adjustBeat();
   }
   
   if (moonlander.getIntValue("color") == 1) {
@@ -150,7 +160,24 @@ void draw() {
 }
 
 void adjustBeat() {
-  
+  if (colorindex == 0) {
+    colorX = 255;
+  } else if (colorindex == 1) {
+    colorY = 255;
+  } else {
+    colorZ = 255; 
+  }
+  if (grow) {
+    ballsize+=10;
+    if (ballsize == 90) {
+      grow = false;  
+    }
+  } else {
+    ballsize-=5;
+    if (ballsize == 30) {
+      grow = true;
+    }
+  }
 }
 
 void speedTo(int speed, int i) {
@@ -251,28 +278,3 @@ void drawBall(float i) {
   popMatrix();
   angle += PI*2/plots;
 }
-
-//void keyPressed() {
-  //if (key == CODED) {
-    
-    // Left/right arrow keys: seek song
-    //if (keyCode == LEFT) {
-    //  song.skip(-SONG_SKIP_MILLISECONDS);
-    //} 
-    //else if (keyCode == RIGHT) {
-      //song.skip(SONG_SKIP_MILLISECONDS);
-    //}
-  //}
-  // Space bar: play/payse
-  //else if (key == '!') {
-    //if (song.isPlaying())
-      //song.pause();
-    //else
-      //song.play();
-  //}
-  // Enter: spit out the current position
-  // (for syncing)
-  //else if (key == ENTER) {
-    //print(song.position() + ", ");
-  //}
-//}
