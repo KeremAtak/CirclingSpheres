@@ -19,6 +19,8 @@ int camposx;
 int camposy;
 int camposz;
 
+int zoom;
+
 boolean plusColorX = false;
 boolean plusColorY = false;
 boolean plusColorZ = false;
@@ -67,36 +69,63 @@ void draw() {
   camposx = moonlander.getIntValue("camposx");
   camposy = moonlander.getIntValue("camposy");
   camposz = moonlander.getIntValue("camposz");
-  
+  zoom = moonlander.getIntValue("zoom");
   if (moonlander.getIntValue("color") == 1) {
     yswap(1);  
   } else if (moonlander.getIntValue("color") == 2) {
     xswap(5);
     yswap(4);
+  } else if (moonlander.getIntValue("color") == 3) {
+    xswap(2);
+    yswap(3);
+    zswap(5);
+  } else if (moonlander.getIntValue("color") == 4) {
+    xswap(7);
+    yswap(5);
+    zswap(3);
+  } else if (moonlander.getIntValue("color") == 5) {
+    xswap(13);
+    yswap(11);
+    zswap(9);
+  } else if (moonlander.getIntValue("color") == 6) {
+    xswap(21);
+    yswap(31);
+    zswap(29);
   }
   
   
   if (moonlander.getIntValue("speed") == 1) {
-    speedTo(30000, 3);
-    fastBump = true;
+    fastBump = true; 
   } else if (moonlander.getIntValue("speed") == 2) {
     if (fastBump) {
-      speedTo(20000, 50);
+      speedTo(30000, 1000);
     }
     fastBump = false;
   } else if (moonlander.getIntValue("speed") == 3) {
-    speedTo(30000, 5);
-    fastBump = true;
+    if (fastBump) {
+      speedTo(40000, 2000);
+    }
+    fastBump = false;
   } else if (moonlander.getIntValue("speed") == 4) {
-    speedTo(30000, 10);
-    fastBump = true;
+    if (fastBump) {
+      speedTo(50000, 3000);
+    }
+    fastBump = false;
   } else if (moonlander.getIntValue("speed") == 5) {
-    speedTo(30000, 10);
-    fastBump = true;
+    if (fastBump) {
+      speedTo(100000, 5000);
+    }
+    fastBump = false;
+  } else if (moonlander.getIntValue("speed") == 7) {
+    rotationSpeed = 100000;
+  } else if (moonlander.getIntValue("speed") == 8) {
+    rotationSpeed = 50000;
+  } else if (moonlander.getIntValue("speed") == 6) {
+    speedTo(50000, -5000);
+    fastBump = false;
   }
-  
   else if (moonlander.getIntValue("speed") == 0) {
-    rotationSpeed = 5000;
+    rotationSpeed = 5001;
   }
   
 
