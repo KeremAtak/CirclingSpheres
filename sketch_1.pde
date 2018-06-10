@@ -19,7 +19,10 @@ int camposx;
 int camposy;
 int camposz;
 
-int zoom;
+int ballsize;
+int radius;
+int timeranout;
+int beat;
 
 boolean plusColorX = false;
 boolean plusColorY = false;
@@ -64,12 +67,21 @@ void setupAudio() {
 void draw() {
   background(bg);
   moonlander.update();
+  //nothing to see here..
   val = moonlander.getIntValue("test");
   int start = moonlander.getIntValue("start");
   camposx = moonlander.getIntValue("camposx");
   camposy = moonlander.getIntValue("camposy");
   camposz = moonlander.getIntValue("camposz");
-  zoom = moonlander.getIntValue("zoom");
+  ballsize = moonlander.getIntValue("ballsize ");
+  radius = moonlander.getIntValue("radius");
+  timeranout = moonlander.getIntValue("timeranout");
+  beat = moonlander.getIntValue("beat");
+  
+  if (beat == 1) {
+   adjustBeat(); 
+  }
+  
   if (moonlander.getIntValue("color") == 1) {
     yswap(1);  
   } else if (moonlander.getIntValue("color") == 2) {
@@ -117,7 +129,7 @@ void draw() {
     }
     fastBump = false;
   } else if (moonlander.getIntValue("speed") == 7) {
-    rotationSpeed = 100000;
+    rotationSpeed = 150000;
   } else if (moonlander.getIntValue("speed") == 8) {
     rotationSpeed = 50000;
   } else if (moonlander.getIntValue("speed") == 6) {
@@ -135,6 +147,10 @@ void draw() {
   if (start !=  -1) {
     drawDemo(5);
   }
+}
+
+void adjustBeat() {
+  
 }
 
 void speedTo(int speed, int i) {
@@ -225,9 +241,13 @@ void drawBall(float i) {
   float y = 100 * cos( t + i );
   fill(colorX, colorY, colorZ);
   pushMatrix();
-  translate(x, y);
+  translate(x * (1.0 * radius / 10), y * (1.0 * radius / 10));
   rotate(t);
-  sphere(30);
+  if (timeranout != 1) {
+      sphere(ballsize);
+  } else {
+    text("Aika loppui ':D'",50,50);
+  }
   popMatrix();
   angle += PI*2/plots;
 }
